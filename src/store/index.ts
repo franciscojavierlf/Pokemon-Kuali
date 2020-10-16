@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import PokemonBlob from '@/api/PokemonBlob';
+import PokemonBlob from '@/api/pokemonBlob';
 
 Vue.use(Vuex);
 
