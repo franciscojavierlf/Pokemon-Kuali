@@ -1,7 +1,9 @@
 import { Dictionary } from 'vue-router/types/router';
-import Stats from './stats';
-import Type from './type';
 import Description from './description';
+import Move from './move';
+import Version from './version';
+import Type from './type';
+import Stat from './stats';
 
 /**
  * Una clase que ayuda a gestionar un pokémon.
@@ -16,19 +18,19 @@ export default class Pokemon {
 
   public readonly baseExperience: number;
 
-  public readonly stats: Stats;
+  public readonly stats: Dictionary<Stat>;
+
+  public readonly moves: Array<Move>;
 
   public readonly spriteUrl: string;
 
   private readonly names: Dictionary<string>;
 
-  private readonly moves: Dictionary<Dictionary<string>>;
-
-  private readonly types: Array<string>;
+  private readonly types: Array<Type>;
 
   private readonly genera: Dictionary<string>;
 
-  private readonly descriptions: Dictionary<Dictionary<string>>;
+  private readonly descriptions: Array<Description>;
 
   /**
    * Crea un pokémon con todas sus características.
@@ -44,7 +46,7 @@ export default class Pokemon {
    * @param descriptions Las descripciones en diferentes idiomas y versiones de juego.
    * @param spriteUrl La url para cargar el sprite.
    */
-  constructor(id: number, names: Dictionary<string>, height: number, weight: number, baseExperience: number, moves: Array<Move>, stats: Stats, types: Array<Type>, genera: Dictionary<string>, descriptions: Array<Description>, spriteUrl: string) {
+  constructor(id: number, names: Dictionary<string>, height: number, weight: number, baseExperience: number, moves: Array<Move>, stats: Dictionary<Stat>, types: Array<Type>, genera: Dictionary<string>, descriptions: Array<Description>, spriteUrl: string) {
     this.id = id;
     this.names = names;
     this.height = height;
@@ -62,11 +64,21 @@ export default class Pokemon {
     return this.names[lang];
   }
 
-  public getMoves(lang: string, version: string) {
-    return this.moves[lang][version];
-  }
-
   public getGenera(lang: string) {
     return this.genera[lang];
+  }
+
+  public getDescription(lang: string, version: Version) {
+    let d: Description;
+    for (let i = 0; i < this.descriptions.length; i++) {
+      d = this.descriptions[i];
+      if (d.lang === lang && d.version === version) {
+        return d;
+      }
+    }
+  }
+
+  public static createEmpty(): Pokemon {
+    return new Pokemon(-1, [], -1, -1, -1, [], )
   }
 }

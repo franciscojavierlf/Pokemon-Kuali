@@ -11,7 +11,7 @@ Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 
 Vue.config.productionTip = false;
-
+router.currentRoute.query
 new Vue({
   router,
   store,

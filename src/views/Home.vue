@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img src="@/assets/pokeball.png" />
-    <h1>Pokémon Companion</h1>
+    <h1>{{ t.get('title') }}</h1>
     <!-- Muestra la lista de nombres de los pokémon. -->
     <b-overlay :show="pokemon.length === 0">
       <b-pagination
@@ -32,6 +32,8 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Home extends Vue {
+  private t: Translator;
+
   private currentPage = 1;
 
   private perPage = 50;
@@ -45,6 +47,12 @@ export default class Home extends Vue {
     { key: 'id', label: 'Number', sortable: true },
     { key: 'name', label: 'Name', sortable: true },
   ];
+
+  constructor() {
+    super();
+    // Asigna el idioma seleccionado
+    this.t = new Translator(this.$store.state.lang);
+  }
 
   async created() {
     // Cargamos los pokemones con un dispatch de la tienda

@@ -1,3 +1,4 @@
+import Version from './version';
 
 /**
  * La descripción de un pokémon.

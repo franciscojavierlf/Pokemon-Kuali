@@ -1,24 +1,5 @@
-# pokemon-kuali
+# Pokémon Companion
 
-## Project setup
-```
-npm install
-```
+Una página web hecha en Vue.js que accede a la API de https://pokeapi.co para obtener información acerca de los pokémon.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Cabe recalcar que este proyecto fue para una entrevista de trabajo, por lo que me esforcé en poder mostrar bien la información en un corto tiempo. Por esto mismo, hay ciertas cosas que me hubieran gustado realizar pero que por el tiempo no pude. Por ejemplo, es muy importante que una página web no sea tan dependiente de una API, porque al momento de que esta cambia o deja de funcionar, debe ser posible cambiarse a otra sin tanto problema. Por ello, hubiera sido mejor declarar varios datos de manera estática en el código (como stats, tipos de pokémon, etc), pero dado a que se le quiso dar la funcionalidad de ser multilenguaje, traducir cada uno iba a llevar demasiado. Ésta es la razón por la que me tomé la libertad de no hacerlo tan robusto; simplemente para poder mostrar mis conocimientos de programación.

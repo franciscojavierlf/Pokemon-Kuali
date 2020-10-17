@@ -1,29 +1,50 @@
 <template>
   <div class="container">
-    pokemon
+    <ul class="type-display">
+      <h2>{{ t.get('types') }}</h2>
+      <li v-for="type of pokemon.getTypes()" :key="type.id" :class="[type.id]">
+        {{ type.getName(store.state.lang) }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script lang="ts">
-
-import PokemonBlob from '@/api/PokemonBlob';
-import Pokemon from '@/logic/pokemon';
-import { Component, Vue } from 'vue-property-decorator';
+import { API } from '@/api/api';
+import PokemonBlob from "@/api/pokemonBlob";
+import Pokemon from "@/logic/pokemon";
+import Type from '@/logic/type';
+import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class PokemonView extends Vue {
-  private pokemon: Pokemon | undefined;
+  private t
+
+  private pokemon: Pokemon = Pokemon.createEmpty();
 
   created() {
-    // Carga el pokémon con el id de parámetros
-    // Sabemos que existe un id porque router ya nos
-    // protege de no tenerlo
-    const blob = new PokemonBlob();
-    blob.getPokemon(Number(this.$route.params.id))
-      .then((p) => { this.pokemon = p; });
+    // Hace el fetch de los tipos de pokémon, y versiones del juego
+    Promise.all([
+      this.$store.dispatch("fetchTypes"),
+      this.$store.dispatch("fetchVersions"),
+    ]).then(async () => {
+      const blob = new PokemonBlob();
+      this.pokemon = await blob.getPokemon(
+        Number(this.$route.params.id),
+        this.$store.state.types,
+        this.$store.state.versions
+      ) ?? Pokemon.createEmpty();
+    });
   }
 }
 </script>
 
 <style lang="scss">
+.container {
+  .type-display {
+    .grass {
+      background-color: green;
+    }
+  }
+}
 </style>
