@@ -1,80 +1,27 @@
-import { Dictionary } from 'vue-router/types/router';
-
-
+/**
+ * El tipo de pokémon.
+ */
 export default class Type {
   public readonly id: string;
-  
-  #names: Dictionary<string> = {};
 
-  #doubleDamageFrom: Array<Type> = [];
+  public readonly names: Dictionary<string>;
 
-  #doubleDamageTo: Array<Type> = [];
+  public doubleDamageFrom: Array<Type> = [];
 
-  #halfDamageFrom: Array<Type> = [];
+  public doubleDamageTo: Array<Type> = [];
 
-  #halfDamageTo: Array<Type> = [];
+  public halfDamageFrom: Array<Type> = [];
 
-  #noDamgeFrom: Array<Type> = [];
+  public halfDamageTo: Array<Type> = [];
 
-  #noDamageTo: Array<Type> = [];
+  public noDamageFrom: Array<Type> = [];
 
-  constructor(id: string) {
+  public noDamageTo: Array<Type> = [];
+
+  constructor(id: string, names: Dictionary<string>) {
     this.id = id;
-  }
-
-  getName(lang: string) {
-    return this.#names[lang];
-  }
-
-  get doubleDamageFrom() {
-    return this.#doubleDamageFrom;
-  }
-
-  get doubleDamageTo() {
-    return this.#doubleDamageTo;
-  }
-
-  get halfDamageFrom() {
-    return this.#halfDamageFrom;
-  }
-
-  get halfDamageTo() {
-    return this.#halfDamageTo;
-  }
-
-  get noDamageFrom() {
-    return this.#noDamgeFrom;
-  }
-
-  get noDamageTo() {
-    return this.#noDamageTo;
-  }
-
-  public setNames(names: Dictionary<string>) {
-    this.#names = names;
-  }
-
-  public setDoubleDamageFrom(arr: Array<Type>) {
-    this.#doubleDamageFrom = arr;
-  }
-
-  public setDoubleDamageTo(arr: Array<Type>) {
-    this.#doubleDamageTo = arr;
-  }
-
-  public setHalfDamageFrom(arr: Array<Type>) {
-    this.#halfDamageFrom = arr;
-  }
-
-  public setHalfDamageTo(arr: Array<Type>) {
-    this.#halfDamageTo = arr;
-  }
-
-  public setNoDamageFrom(arr: Array<Type>) {
-    this.#noDamgeFrom = arr;
-  }
-
-  public setNoDamageTo(arr: Array<Type>) {
-    this.#noDamageTo = arr;
+    this.names = names;
   }
 }
+
+type Dictionary<T> = { [id: string]: T };

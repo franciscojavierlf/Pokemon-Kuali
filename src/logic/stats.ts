@@ -1,5 +1,3 @@
-import { Dictionary } from 'vue-router/types/router';
-
 /**
  * Generalización de las stats de un pokémon.
  */
@@ -8,11 +6,12 @@ export default class Stat {
 
   public readonly names: Dictionary<string>;
 
-  public readonly value: number;
+  public value = -1;
 
-  constructor(id: string, names: Dictionary<string>, value: number) {
+  constructor(id: string, names: Dictionary<string>) {
     this.id = id;
     this.names = names;
-    this.value = value;
   }
 }
+
+type Dictionary<T> = { [id: string]: T };

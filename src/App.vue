@@ -1,8 +1,24 @@
 <template>
-  <router-view/>
+  <div>
+    <Navigator/>
+    <router-view/>
+  </div>
 </template>
 
-<style lang="scss">
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import Navigator from '@/components/Navigator.vue';
+
+@Component({
+  components: {
+    Navigator,
+  },
+})
+export default class App extends Vue {
+}
+</script>
+
+<style lang="scss" scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

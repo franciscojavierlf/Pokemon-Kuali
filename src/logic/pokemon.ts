@@ -1,16 +1,18 @@
-import { Dictionary } from 'vue-router/types/router';
-import Description from './description';
 import Move from './move';
-import Version from './version';
 import Type from './type';
 import Stat from './stats';
+import Description from './description';
+import Version from './version';
 
 /**
  * Una clase que ayuda a gestionar un pokémon.
  */
 export default class Pokemon {
+  public static LastId = 893;
 
   public readonly id: number;
+
+  public readonly names: Dictionary<string>;
 
   public readonly height: number;
 
@@ -18,24 +20,22 @@ export default class Pokemon {
 
   public readonly baseExperience: number;
 
+  public readonly genera: Dictionary<string>;
+
+  public readonly description: Dictionary<Description>;
+
   public readonly stats: Dictionary<Stat>;
 
-  public readonly moves: Array<Move>;
+  public readonly moves: Dictionary<Move>;
+
+  public readonly types: Dictionary<Type>;
 
   public readonly spriteUrl: string;
-
-  private readonly names: Dictionary<string>;
-
-  private readonly types: Array<Type>;
-
-  private readonly genera: Dictionary<string>;
-
-  private readonly descriptions: Array<Description>;
 
   /**
    * Crea un pokémon con todas sus características.
    * @param id El id del pokémon.
-   * @param names Los nombres en diferentes idiomas.
+   * @param names El nombre.
    * @param height La altura.
    * @param weight El peso.
    * @param baseExperience La experiencia base.
@@ -46,39 +46,48 @@ export default class Pokemon {
    * @param descriptions Las descripciones en diferentes idiomas y versiones de juego.
    * @param spriteUrl La url para cargar el sprite.
    */
-  constructor(id: number, names: Dictionary<string>, height: number, weight: number, baseExperience: number, moves: Array<Move>, stats: Dictionary<Stat>, types: Array<Type>, genera: Dictionary<string>, descriptions: Array<Description>, spriteUrl: string) {
+  constructor(
+    id: number,
+    names: Dictionary<string>,
+    height: number,
+    weight: number,
+    baseExperience: number,
+    genera: Dictionary<string>,
+    description: Dictionary<Description>,
+    moves: Dictionary<Move>,
+    stats: Dictionary<Stat>,
+    types: Dictionary<Type>,
+    spriteUrl: string,
+  ) {
     this.id = id;
     this.names = names;
     this.height = height;
     this.weight = weight;
     this.baseExperience = baseExperience;
+    this.genera = genera;
+    this.description = description;
     this.moves = moves;
     this.stats = stats;
     this.types = types;
-    this.genera = genera;
-    this.descriptions = descriptions;
     this.spriteUrl = spriteUrl;
   }
 
-  public getName(lang: string) {
-    return this.names[lang];
+  public nextId() {
+    return this.id >= Pokemon.LastId ? 1 : this.id + 1;
   }
 
-  public getGenera(lang: string) {
-    return this.genera[lang];
+  public previousId() {
+    return this.id <= 1 ? Pokemon.LastId : this.id - 1;
   }
 
-  public getDescription(lang: string, version: Version) {
-    let d: Description;
-    for (let i = 0; i < this.descriptions.length; i++) {
-      d = this.descriptions[i];
-      if (d.lang === lang && d.version === version) {
-        return d;
-      }
-    }
+  public isInVersion(v: Version, lang: string): boolean {
+    return this.description[v.id] !== undefined
+      && this.description[v.id].text[lang] !== undefined;
   }
 
   public static createEmpty(): Pokemon {
-    return new Pokemon(-1, [], -1, -1, -1, [], )
+    return new Pokemon(-1, {}, -1, -1, -1, {}, {}, {}, {}, {}, '');
   }
 }
+
+type Dictionary<T> = { [id: string]: T };

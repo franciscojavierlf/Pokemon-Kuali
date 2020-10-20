@@ -1,10 +1,9 @@
 <template>
   <div class="home">
-    <img src="@/assets/pokeball.png" />
-    <h1>{{ t.get('title') }}</h1>
     <!-- Muestra la lista de nombres de los pokémon. -->
     <b-overlay :show="pokemon.length === 0">
       <b-pagination
+        id="pagination"
         v-model="currentPage"
         :total-rows="rows"
         :per-page="perPage"
@@ -26,13 +25,14 @@
 </template>
 
 <script lang="ts">
+import Translations from '@/lang/translations';
 import PokemonReference from '@/logic/pokemonReference';
 import Utils from '@/utils/utils';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Home extends Vue {
-  private t: Translator;
+  private t = Translations;
 
   private currentPage = 1;
 
@@ -48,16 +48,14 @@ export default class Home extends Vue {
     { key: 'name', label: 'Name', sortable: true },
   ];
 
-  constructor() {
-    super();
-    // Asigna el idioma seleccionado
-    this.t = new Translator(this.$store.state.lang);
-  }
-
-  async created() {
+  created() {
     // Cargamos los pokemones con un dispatch de la tienda
     this.$store.dispatch('fetchPokemon')
       .then(() => { this.pokemon = this.$store.state.pokemon; });
+  }
+
+  get lang() {
+    return this.$store.state.language;
   }
 
   private get items() {
@@ -83,14 +81,14 @@ export default class Home extends Vue {
 
 <style lang="scss">
 .home {
-  img {
-    width: 100px;
-    display: inline-block;
-  }
 
   h1 {
     font-size: 3em;
     display: inline-block;
+  }
+
+  #pagination {
+    color: black !important;
   }
 
   #pokemon-table {

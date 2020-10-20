@@ -1,23 +1,38 @@
 import Description from './description';
-import Version from './version';
+import Type from './type';
 
 /**
  * Movimiento de un pokémon.
  */
 export default class Move {
-  private readonly descriptions: Array<Description>;
+  public readonly id: string;
 
-  constructor(accuracy: number, descriptions: Array<Description>) {
-    this.descriptions = descriptions;
-  }
+  public readonly names: Dictionary<string>;
 
-  public getDescription(lang: string, version: Version) {
-    let d: Description;
-    for (let i = 0; i < this.descriptions.length; i++) {
-      d = this.descriptions[i];
-      if (d.lang === lang && d.version === version) {
-        return d;
-      }
-    }
+  public readonly power: number;
+
+  public readonly pp: number;
+
+  public readonly accuracy: number;
+
+  public readonly type: Type;
+
+  public readonly description: Dictionary<Description>;
+
+  public versionGroup = '';
+
+  public atLevel = -1;
+
+  constructor(id: string, names: Dictionary<string>, power: number, pp: number, accuracy: number,
+    type: Type, description: Dictionary<Description>) {
+    this.id = id;
+    this.names = names;
+    this.power = power;
+    this.pp = pp;
+    this.accuracy = accuracy;
+    this.type = type;
+    this.description = description;
   }
 }
+
+type Dictionary<T> = { [id: string]: T };
