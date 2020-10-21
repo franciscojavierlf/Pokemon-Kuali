@@ -1,54 +1,86 @@
 <template>
-  <div class="container">
-    <b-button @click="previous">{{ t['previous'][lang] }}</b-button>
-    <b-button @click="next">{{ t['next'][lang] }}</b-button>
+  <b-overlay variant="transparent" blur="0" :show="loading">
+    <div class="container">
     <!-- El nombre -->
-    <b-overlay :show="loading">
-      <div v-if="loading" style="height: 100%"></div>
-      <div v-else>
-        <h1>{{ pokemon.names[lang] }}</h1>
-        <h2>#{{ nicePokemonNumber() }}</h2>
-        <b-img :src="pokemon.spriteUrl"/>
-        {{ pokemon.genera[lang] }}
-        <!-- Selección de la versión del juego -->
-        <b-select v-model="versionId" :options="versionsSelect" />
-        {{ pokemon.description[versionId].text[lang] }}
-        <h3>{{ t['height'][lang] }}</h3>
-        {{ pokemon.height }}
-        <h3>{{ t['weight'][lang] }}</h3>
-        {{ pokemon.weight }}
-        <h3>{{ t['baseXp'][lang] }}</h3>
-        {{ pokemon.baseExperience }}
-        <h2>{{ t['types'][lang] }}</h2>
-        <ul class="type-display">
-          <li v-for="type of pokemon.types" :key="type.id" :class="[type.id]">
-            {{ type.names[lang] }}
-          </li>
-        </ul>
-        <h2>Stats</h2>
-        <ul class="stats-display">
-          <li v-for="stat of pokemon.stats" :key="stat.id">
-            {{ stat.name }}: {{ stat.value }}
-            <b-progress :value="stat.value"></b-progress>
-          </li>
-        </ul>
-        <!-- Los movimientos -->
-        <div class="accordion" role="tablist">
-          <b-card v-for="move of pokemon.moves" :key="move.id" no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1" role="tab">
-              <b-button block v-b-toggle="move.id" variant="info">{{ move.names[lang] }}</b-button>
-            </b-card-header>
-            <b-collapse :id="move.id" visible accordion="my-accordion" role="tabpanel">
-              <b-card-body>
-                <b-card-text>{{ }}</b-card-text>
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-        </div>
-      </div>
-    </b-overlay>
-    {{ pokemon.moves.length}}
-  </div>
+      <b-container v-if="!loading">
+        <b-row>
+          <b-col style="text-align: left">
+            <b-button
+              class="move-btn"
+              variant="success"
+              @click="previous"
+            >
+              {{ t['previous'][lang] }}
+            </b-button>
+          </b-col>
+          <b-col style="text-align: right;">
+            <b-button
+              class="move-btn"
+              variant="success"
+              @click="next"
+            >
+              {{ t['next'][lang] }}
+            </b-button>
+          </b-col>
+        </b-row>
+        <!-- La info -->
+        <b-row style="margin-top: 25px;">
+          <b-col cols="4">
+            <b-img id="sprite" :src="pokemon.spriteUrl"/>
+            <h1 id="name">{{ pokemon.names[lang] }}</h1>
+            <h2 id="number">#{{ nicePokemonNumber() }}</h2>
+            {{ pokemon.genera[lang] }}
+          </b-col>
+          <b-col>
+            <table class="stats-display">
+              <tr v-for="stat of pokemon.stats" :key="stat.id">
+                <td>
+                  {{ stat.names[lang] }}
+                </td>
+                <td>
+                  <b-progress
+                    height="2em"
+                    :value="stat.value / 255 * 100"
+                    show-progress
+                  />
+                </td>
+              </tr>
+            </table>
+          </b-col>
+        </b-row>
+        <!-- Descripción y tipos -->
+        <b-row>
+          <b-col cols="4">
+            <ul class="types-display">
+              <li v-for="type of pokemon.types" :key="type.id" :class="[type.id]">
+                {{ type.names[lang] }}
+              </li>
+            </ul>
+          </b-col>
+          <b-col>
+            <b-select v-model="versionId" size="sm" :options="versionsSelect" />
+            <p>{{ pokemon.description[versionId].text[lang] }}</p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <table id="profile-table">
+              <thead>
+                <td>{{ t['height'][lang] }}</td>
+                <td>{{ t['weight'][lang] }}</td>
+                <td>{{ t['baseXp'][lang] }}</td>
+              </thead>
+              <tr>
+                <td>{{ pokemon.height }}</td>
+                <td>{{ pokemon.weight }}</td>
+                <td>{{ pokemon.baseExperience }}</td>
+              </tr>
+            </table>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+  </b-overlay>
 </template>
 
 <script lang="ts">
@@ -135,13 +167,129 @@ type Dictionary<T> = { [id: string]: T };
 
 <style lang="scss" scoped>
 .container {
-  .type-display {
-    .grass {
-      background-color: green;
+  max-width: 1000px;
+  padding: 15px;
+  padding-top: 0px;
+  min-height: 500px;
+  background-color: white;
+  margin-top: 25px;
+  border-radius: 10px;
+
+  .move-btn {
+    margin: 10px;
+  }
+
+  #name {
+    margin-top: -25px;
+  }
+
+  #number {
+    color: gray;
+  }
+
+  #sprite {
+    width: 200px;
+    margin-top: -30px;
+    image-rendering: crisp-edges;
+    /* Chromium + Safari */
+    image-rendering: pixelated;
+
+  }
+
+  #profile-table {
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+    margin-top: 10px;
+
+    thead {
+      font-weight: bold;
+    }
+    tr td {
+      width: 33%;
     }
   }
 
   .stats-display {
+    padding: 25px;
+    margin: auto;
+    max-width: 600px;
+
+    tr td:first-child {
+      width: 30%;
+    }
+
+    tr td {
+      padding: 5px;
+    }
+  }
+
+  .types-display {
+    margin-left: -50px;
+    padding: 0px;
+    li {
+      list-style-type: none;
+      background-color: gray;
+      margin: 0px 5px 0px 0px;
+      display: inline-block;
+      width: 75px;
+      padding: 2px;
+      border-radius: 5px;
+    }
+    .grass {
+      background-color: green;
+    }
+    .fire {
+      background-color: lightcoral;
+    }
+    .poison {
+      background-color: violet;
+    }
+    .normal {
+      background-color: lightgray;
+    }
+    .water {
+      background-color: lightskyblue;
+    }
+    .fighting {
+      background-color: brown;
+    }
+    .flying {
+      background-color: lightseagreen;
+    }
+    .ground {
+      background-color: bisque;
+    }
+    .rock {
+      background-color: burlywood;
+    }
+    .bug {
+      background-color: greenyellow;
+    }
+    .ghost {
+      background-color: purple;
+    }
+    .electric {
+      background-color: yellow;
+    }
+    .psychic {
+      background-color: pink;
+    }
+    .ice {
+      background-color: cyan;
+    }
+    .dragon {
+      background-color: cornflowerblue;
+    }
+    .dark {
+      background-color: darkslategrey;
+    }
+    .steel {
+      background-color: gray;
+    }
+    .fairy {
+      background-color: lightpink;
+    }
   }
 }
 </style>

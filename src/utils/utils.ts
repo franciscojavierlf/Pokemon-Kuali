@@ -8,11 +8,11 @@ export default class Utils {
    * @param text
    * @param capitalize Capitaliza las letras iniciales.
    */
-  public static kebabToNormal(text: string, capitalize: boolean = false) {
+  public static kebabToNormal(text: string, capitalize = false) {
     const parts = text.split('-');
     // Capitaliza la primera letra de cada palabra
     for (let i = 0; i < parts.length; i += 1) {
-      parts[i] = Utils.capitalizeFirst(parts[i]);
+      parts[i] = capitalize ? Utils.capitalizeFirst(parts[i]) : parts[i];
     }
     // Regresa la combinación de las partes
     return parts.join(' ');

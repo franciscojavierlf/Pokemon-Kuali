@@ -1,7 +1,7 @@
 <template>
-  <div class="home">
+  <b-overlay :show="pokemon.length === 0">
+    <div class="home">
     <!-- Muestra la lista de nombres de los pokémon. -->
-    <b-overlay :show="pokemon.length === 0">
       <b-pagination
         id="pagination"
         v-model="currentPage"
@@ -10,22 +10,25 @@
         align="center"
         aria-controls="pokemon-table"
       />
-      <b-table
-        id="pokemon-table"
-        striped
-        hover
-        :items="items"
-        :per-page="perPage"
-        :current-page="currentPage"
-        :fields="fields"
-        @row-clicked="rowClicked"
-      />
-    </b-overlay>
-  </div>
+      <div id="table-container">
+        <b-table
+          id="pokemon-table"
+          striped
+          hover
+          :items="items"
+          :per-page="perPage"
+          :current-page="currentPage"
+          :fields="fields"
+          @row-clicked="rowClicked"
+        />
+      </div>
+    </div>
+  </b-overlay>
 </template>
 
 <script lang="ts">
 import Translations from '@/lang/translations';
+import Pokemon from '@/logic/pokemon';
 import PokemonReference from '@/logic/pokemonReference';
 import Utils from '@/utils/utils';
 import { Component, Vue } from 'vue-property-decorator';
@@ -61,7 +64,10 @@ export default class Home extends Vue {
   private get items() {
     const res = [];
     for (let i = 0; i < this.pokemon.length; i += 1) {
-      res.push({ id: this.pokemon[i].id, name: Utils.kebabToNormal(this.pokemon[i].name, true) });
+      const p = this.pokemon[i];
+      if (p.id > 0 && p.id <= Pokemon.LastId) {
+        res.push({ id: p.id, name: Utils.kebabToNormal(p.name, true) });
+      }
     }
     return res;
   }
@@ -81,6 +87,8 @@ export default class Home extends Vue {
 
 <style lang="scss">
 .home {
+  background-color: lightgray;
+  padding-top: 15px;
 
   h1 {
     font-size: 3em;
@@ -91,10 +99,17 @@ export default class Home extends Vue {
     color: black !important;
   }
 
-  #pokemon-table {
-    td {
-      padding: 5px;
-      cursor: pointer;
+  #table-container {
+    height: calc(100vh - 150px);
+    overflow: auto;
+
+    #pokemon-table {
+      background-color: white;
+      margin: 0px;
+      td {
+        padding: 5px;
+        cursor: pointer;
+      }
     }
   }
 }

@@ -268,7 +268,7 @@ export default class PokemonBlob {
       const { height, weight } = pokemonData;
       const baseExperience = pokemonData.base_experience;
       const spriteUrl = pokemonData.sprites.front_default;
-      const stats = await this.getStats(pokemonData) ?? {};
+      const stats = await this.getStats(pokemonData);
       // Crea los tipos
       const allTypes: Dictionary<Type> = await this.getAllTypes();
       const types: Dictionary<Type> = {};
@@ -279,7 +279,8 @@ export default class PokemonBlob {
       }
       const versions = await this.getAllVersions();
       // Extrae los movimientos
-      const moves = await this.getMoves(pokemonData);
+      // const moves = await this.getMoves(pokemonData);
+      const moves = {}; // Vacío porque tarda mucho
       // Luego toda la info del tipo
       const speciesData = speciesRes.data;
       const genera: Dictionary<string> = {}; // Genera
@@ -324,11 +325,14 @@ export default class PokemonBlob {
     const stats = await this.getAllStats();
     const pokeStats: Dictionary<Stat> = {};
     for (let i = 0; i < pokemonData.stats.length; i += 1) {
-      const { name } = pokemonData.stats[i].stat;
-      pokeStats[name] = stats[name];
-      pokeStats[name].value = pokemonData.stats[i].base_stat;
+      const base = pokemonData.stats[i].base_stat;
+      if (base >= 0) {
+        const { name } = pokemonData.stats[i].stat;
+        pokeStats[name] = stats[name];
+        pokeStats[name].value = base;
+      }
     }
-    return stats;
+    return pokeStats;
   }
 
   /**

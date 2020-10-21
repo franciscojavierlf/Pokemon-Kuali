@@ -32,8 +32,10 @@ const router = new VueRouter({
  */
 router.beforeEach((to, from, next) => {
   if (!to.matched.some((x) => x.meta.authorized)
+    || (to.params.id !== undefined
+    && (!Number(to.params.id)
     || Number(to.params.id) < 1
-    || Number(to.params.id) > Pokemon.LastId
+    || Number(to.params.id) > Pokemon.LastId))
   ) {
     next('/');
   } else {

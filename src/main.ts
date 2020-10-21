@@ -6,6 +6,7 @@ import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
 import store from './store';
+import PokemonBlob from './api/pokemonBlob';
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);

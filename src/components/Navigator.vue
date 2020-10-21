@@ -49,7 +49,7 @@ export default class Navigator extends Vue {
 
 <style lang="scss">
 #navbar {
-  background-color: #ba4c50 !important;
+  background-color: #bd4242 !important;
 }
 #icon {
   width: 35px;
@@ -68,6 +68,7 @@ export default class Navigator extends Vue {
 
 #lang-select {
   margin-top: 10px;
+  margin-right: 25px;
 }
 
 </style>
