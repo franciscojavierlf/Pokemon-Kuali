@@ -11,9 +11,9 @@ export namespace API {
     spAttack: 'special-attack',
     spDefense: 'special-defense',
     speed: 'speed',
-  }
+  };
 
   export const types = {
     grass: 'grass',
-  }
+  };
 }

@@ -6,15 +6,17 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "node server.js"
+    "express": "vue-cli-service express:watch",
+    "express:run": "vue-cli-service express:run",
+    "start": "vue-cli-service express:run"
   },
   "dependencies": {
     "axios": "^0.20.0",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.17.3",
     "core-js": "^3.6.5",
-    "express": "^4.17.1",
     "nuxt": "^2.14.6",
+    "pug": "^3.0.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
@@ -40,6 +42,7 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
     "typescript": "~3.9.3",
+    "vue-cli-plugin-express": "^1.0.2",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
